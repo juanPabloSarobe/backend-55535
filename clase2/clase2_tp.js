@@ -46,11 +46,14 @@ const usuario = new Usuario(
   ["Pajaro", "lagarto"]
 );
 
-usuario.addBook("Moby Dick", "Herman Melville");
-console.log(usuario.getFullName());
-console.log(usuario.getBookNames());
-usuario.addBook("El Principito", "Antoine de Saint-Exupéry");
-console.log(usuario.getBookNames());
-usuario.addMascota("perro");
-usuario.addMascota("gato");
-console.log(usuario.countMascota());
+//funcion anonima autoinvocada
+(() => {
+  usuario.addBook("Moby Dick", "Herman Melville");
+  console.log(usuario.getFullName());
+  console.log(usuario.getBookNames());
+  usuario.addBook("El Principito", "Antoine de Saint-Exupéry");
+  console.log(usuario.getBookNames());
+  usuario.addMascota("perro");
+  usuario.addMascota("gato");
+  console.log(usuario.countMascota());
+})();
