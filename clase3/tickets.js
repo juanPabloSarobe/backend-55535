@@ -112,5 +112,5 @@ ticket1.agregarUsuario(34, 4);
 ticket1.agregarUsuario(3, 4);
 ticket1.agregarUsuario(3, 2);
 ticket1.agregarUsuario(3, 4);
-ticket1.ponerEventoEnGira(2, "chubut", "15/08/23");
+ticket1.ponerEventoEnGira(3, "chubut", "15/08/23");
 console.log(ticket1.getEventos());
