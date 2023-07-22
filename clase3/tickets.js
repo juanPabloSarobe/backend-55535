@@ -27,3 +27,90 @@
 //      nueva localidad
 //      nueva fecha
 // El método debe copiar el evento existente, con una nueva localidad, nueva fecha, nuevo id y sus participantes vacíos (Usar spread operator para el resto de las propiedades)
+
+class TicketManager {
+  static #precioBaseDeGanancia = 0.15;
+  constructor() {
+    this.eventos = [];
+  }
+
+  getEventos() {
+    return this.eventos;
+  }
+  agregarEvento = (
+    nombre,
+    lugar,
+    precio,
+    capacidad = 50,
+    fecha = new Date().toLocaleDateString()
+  ) => {
+    const evento = {
+      nombre,
+      lugar,
+      precio: (precio *= 1 + TicketManager.#precioBaseDeGanancia),
+      capacidad,
+      fecha,
+      participantes: [],
+    };
+    if (this.eventos.length === 0) {
+      evento.id = 1;
+    } else {
+      evento.id = this.eventos[this.eventos.length - 1].id + 1;
+    }
+    this.eventos.push(evento);
+  };
+
+  agregarUsuario = (idEvento, idUsuario) => {
+    const eventoId = this.eventos.findIndex((evento) => {
+      return evento.id === idEvento;
+    });
+    if (eventoId === -1) {
+      return console.log("El evento no existe");
+    } else {
+      const participantesActuales = this.eventos[eventoId].participantes;
+      if (!participantesActuales.includes(idUsuario)) {
+        this.eventos[eventoId].participantes.push(idUsuario);
+      } else {
+        console.log(
+          `El participante id: ${idUsuario} ya se encuentra registrado en el evento ${this.eventos[eventoId].nombre}`
+        );
+      }
+    }
+  };
+
+  ponerEventoEnGira = (idEvento, nuevaLocalidad, nuevaFecha) => {
+    if ((nuevaLocalidad || nuevaFecha) === undefined) {
+      return console.log(
+        `La nueva localidad o la nueva fecha no pueden estar vacias`
+      );
+    }
+
+    const eventoId = this.eventos.findIndex((evento) => {
+      return evento.id === idEvento;
+    });
+    if (eventoId === -1) {
+      return console.log("El evento no existe");
+    } else {
+      const eventoElegido = this.eventos[eventoId];
+      const nuevoEvento = {
+        ...eventoElegido,
+        lugar: nuevaLocalidad,
+        fecha: nuevaFecha,
+        participantes: [],
+        id: this.eventos[this.eventos.length - 1].id + 1,
+      };
+      this.eventos.push(nuevoEvento);
+    }
+  };
+}
+
+const ticket1 = new TicketManager();
+ticket1.agregarEvento("Divididos", "Neuquen", 2000);
+ticket1.agregarEvento("Las Pelotas", "Rio Negro", 3000);
+ticket1.agregarEvento("Sumo", "Bs As", 1000);
+ticket1.agregarUsuario(34, 4);
+ticket1.agregarUsuario(3, 4);
+ticket1.agregarUsuario(3, 2);
+ticket1.agregarUsuario(3, 4);
+ticket1.ponerEventoEnGira(2, "chubut", "15/08/23");
+console.log(ticket1.getEventos());
