@@ -34,17 +34,18 @@ class ProductManager {
       if (stock !== 0) {
         if (!stock || isNaN(stock) || stock < 0) {
           throw new Error(
-            "El campo stock no puede estar vacio y debe ser un valor numerico /mayor o igual a cero"
+            "El campo stock no puede estar vacio y debe ser un valor numerico mayor o igual a cero"
           );
         }
       }
     }
-
-    try {
+    // Codigo guardado de ejemplo si quisiera interceptar el error y que continue el resto del script
+    /* try {
       validacionDatos(title, description, price, thumbnail, code, stock);
     } catch (error) {
       return console.log(error);
-    }
+    } */
+    validacionDatos(title, description, price, thumbnail, code, stock);
 
     const product = {
       title: title,
@@ -55,13 +56,36 @@ class ProductManager {
     };
     if (this.products.length === 0) {
       product.id = 1;
+      product.code = code;
     } else {
       product.id = this.products[this.products.length - 1].id + 1;
     }
-    this.products.push(product);
+    const codeTemp = this.products.findIndex((product) => {
+      return product.code === code;
+    });
+    if (codeTemp !== -1) {
+      throw new Error(
+        `Error al insertar el producto con el codigo ${code}, el mismo ya esta cargado con el nombre ${this.products[codeTemp].title}`
+      );
+    } else {
+      product.code = code;
+      this.products.push(product);
+    }
   };
+
   getProducts = () => {
     return this.products;
+  };
+  getProductById = (idBuscado) => {
+    const productoBuscado = this.products.findIndex((product) => {
+      return product.id === idBuscado;
+    });
+
+    if (productoBuscado === -1) {
+      throw new Error(`Error: file not found `);
+    } else {
+      return this.products[productoBuscado];
+    }
   };
 }
 
@@ -86,5 +110,16 @@ producto1.addProduct(
   "ABC456",
   0
 );
+console.log(producto1.getProducts());
+producto1.addProduct(
+  "producto3",
+  "Descripcion del producto 3",
+  150,
+  "sin imagen",
+  "ABC457",
+  0
+);
 
 console.log(producto1.getProducts());
+
+console.log(producto1.getProductById(3));
